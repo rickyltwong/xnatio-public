@@ -1,0 +1,28 @@
+{
+  "patterns": [
+    {
+      "project": "DEMO_SITE",
+      "match": "^(SUBJ\\d{3})$",
+      "to": "{project}_00{1}",
+      "description": "SUBJNNN -> DEMO_SITE_00SUBJNNN"
+    },
+    {
+      "project": "STUDY01_SITE",
+      "match": "^STUDY-?(\\d{3})$",
+      "to": "{project}_STUDY{1}",
+      "description": "STUDY-NNN or STUDYNNN -> STUDY01_SITE_STUDYNNN"
+    },
+    {
+      "project": "PROJECT_SITE",
+      "match": "^HC(\\d{2})$",
+      "to": "{project}_HC0000{1}",
+      "description": "HCNN -> PROJECT_SITE_HC0000NN (healthy controls)"
+    },
+    {
+      "project": "PROJECT_SITE",
+      "match": "^PT(\\d{2})$",
+      "to": "{project}_PT0000{1}",
+      "description": "PTNN -> PROJECT_SITE_PT0000NN (patients)"
+    }
+  ]
+}

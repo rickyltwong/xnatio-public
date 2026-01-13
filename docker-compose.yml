@@ -1,0 +1,35 @@
+# docker-compose.yml
+#
+# Local testing for xnatio Docker image
+#
+# Usage:
+#   # Build the image
+#   docker-compose build
+#
+#   # Dry-run label fixes (reads from .env file)
+#   docker-compose run --rm xnatio apply-label-fixes /config/patterns.json -v
+#
+#   # Execute label fixes
+#   docker-compose run --rm xnatio apply-label-fixes /config/patterns.json --execute -v
+#
+#   # Run any CLI command
+#   docker-compose run --rm xnatio --help
+#   docker-compose run --rm xnatio list-scans PROJECT SUBJECT SESSION -v
+
+services:
+  xnatio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xnatio:latest
+    environment:
+      # Override these in .env file or via docker-compose --env-file
+      - XNAT_SERVER=${XNAT_SERVER}
+      - XNAT_USERNAME=${XNAT_USERNAME}
+      - XNAT_PASSWORD=${XNAT_PASSWORD}
+      - XNAT_VERIFY_TLS=${XNAT_VERIFY_TLS:-true}
+    volumes:
+      # Mount config directory (contains patterns.json)
+      - ./config:/config:ro
+    # Override entrypoint for debugging
+    # entrypoint: ["/bin/bash"]

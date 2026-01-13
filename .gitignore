@@ -1,0 +1,55 @@
+# Env files
+.env*
+!.env.example
+
+scripts/
+!scripts/build_xnatio.sh
+
+# Python cache/bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.ruff_cache/
+.uv-cache/
+
+# Virtual environments
+.venv/
+venv/
+.envrc
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# uv artifacts
+.uv/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage/test
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.pytest_cache/
+.mypy_cache/
+
+# Local data and large test assets
+/tests/data/**
+/tests/**/fixtures/**
+
+# OS junk
+Thumbs.db
+
+.cursor
+.claude

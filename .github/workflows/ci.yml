@@ -1,0 +1,163 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  lint-format-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          cache: true
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Lint (ruff)
+        run: uv run --no-sync ruff check xnatio
+
+      - name: Format check (ruff)
+        run: uv run --no-sync ruff format --check xnatio
+
+      - name: Tests (pytest)
+        run: uv run --no-sync pytest -q --tb=short
+
+      - name: Type checking (mypy)
+        run: uv run --no-sync mypy xnatio --ignore-missing-imports
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          cache: true
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Security audit (pip-audit)
+        run: uv run --no-sync pip-audit --strict --desc on
+        continue-on-error: true
+
+  auto-tag:
+    runs-on: ubuntu-latest
+    needs: lint-format-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Read version
+        id: version
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import tomllib
+
+          data = tomllib.loads(pathlib.Path("pyproject.toml").read_text())
+          version = data["project"]["version"].strip()
+          if not version:
+            raise SystemExit("project.version is empty")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+            fh.write(f"version={version}\n")
+          PY
+
+      - name: Create tag if missing
+        run: |
+          tag="v${{ steps.version.outputs.version }}"
+          if git rev-parse "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "Tag ${tag} already exists; skipping."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${tag}"
+          git push origin "${tag}"
+
+  docker-release:
+    runs-on: ubuntu-latest
+    needs: lint-format-test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image tags
+        id: meta
+        run: |
+          image="ghcr.io/${{ github.repository }}"
+          tags="${image}:${{ github.sha }}"
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            tags="${tags},${image}:${GITHUB_REF_NAME}"
+          elif [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            tags="${tags},${image}:latest"
+          fi
+          echo "tags=${tags}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: docker-release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
