@@ -57,8 +57,8 @@ dev = [
 ]
 
 [project.urls]
-homepage = "https://github.com/rickyltwong/xnatio"
-repository = "https://github.com/rickyltwong/xnatio.git"
+homepage = "https://github.com/rickyltwong/xnatio-public"
+repository = "https://github.com/rickyltwong/xnatio-public.git"
 
 [tool.uv]
 package = true

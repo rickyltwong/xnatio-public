@@ -1,19 +1,58 @@
+# Git
 .git
+.gitignore
+
+# Virtual environments
 .venv
+venv/
+.envrc
+
+# Python cache/bytecode
 __pycache__
 *.pyc
 *.pyo
 *.pyd
 *.egg-info
-.build
+.eggs/
+
+# Build artifacts
 build/
 dist/
-.ruff_cache
-.cache
+.build
+
+# IDE/editor
 .idea
 .vscode
+.cursor
+.claude
+*.swp
+*.swo
+
+# Cache
+.ruff_cache
+.cache
+.uv-cache
+.uv/
+.mypy_cache
+.pytest_cache
+
+# Logs
 *.log
 
-# Tests and docs not needed for building the binary
+# Tests and docs not needed for runtime
 tests/
-docs/ 
+docs/
+
+# Environment files (sensitive!)
+.env*
+!.env.example
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local scripts
+scripts/
+
+# Lock files (we use pyproject.toml deps)
+uv.lock

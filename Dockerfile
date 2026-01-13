@@ -38,7 +38,10 @@ FROM python:3.11-slim AS runtime
 
 LABEL maintainer="Ricky Wong <rickywonglt15@outlook.com>"
 LABEL description="xnatio CLI for XNAT admin tasks"
-LABEL version="0.1.0"
+LABEL version="0.2.0"
+LABEL org.opencontainers.image.source="https://github.com/rickyltwong/xnatio-public"
+LABEL org.opencontainers.image.description="Production-grade CLI for XNAT neuroimaging server administration"
+LABEL org.opencontainers.image.licenses="MIT"
 
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash xnatio

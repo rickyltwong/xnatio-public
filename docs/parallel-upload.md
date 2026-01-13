@@ -50,7 +50,7 @@ Uses DICOM network protocol with parallel associations.
 ```bash
 xio upload-dicom PROJECT SUBJECT SESSION /path/to/dicom_dir \
     --transport dicom-store \
-    --dicom-host 192.168.1.10 \
+    --dicom-host xnat.example.org \
     --dicom-port 8104 \
     --dicom-called-aet XNAT \
     --num-batches 45
@@ -105,7 +105,7 @@ from pathlib import Path
 
 result = send_dicom_store(
     source_dir=Path("/data/dicom/session001"),
-    host="192.168.1.10",
+    host="xnat.example.org",
     port=8104,
     called_aet="XNAT",
     calling_aet="XNATIO",

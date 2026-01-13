@@ -1,10 +1,13 @@
 # docker-compose.yml
 #
-# Local testing for xnatio Docker image
+# Local development and testing for xnatio Docker image
 #
 # Usage:
-#   # Build the image
+#   # Build the image locally
 #   docker-compose build
+#
+#   # Or pull from GitHub Container Registry
+#   docker-compose pull
 #
 #   # Dry-run label fixes (reads from .env file)
 #   docker-compose run --rm xnatio apply-label-fixes /config/patterns.json -v
@@ -15,21 +18,35 @@
 #   # Run any CLI command
 #   docker-compose run --rm xnatio --help
 #   docker-compose run --rm xnatio list-scans PROJECT SUBJECT SESSION -v
+#
+#   # Upload DICOM (mount data directory)
+#   docker-compose run --rm -v /path/to/data:/data:ro xnatio \
+#     upload-dicom PROJECT SUBJECT SESSION /data/dicoms.zip -v
 
 services:
   xnatio:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: xnatio:latest
+    # Use pre-built image from GHCR (recommended for production)
+    image: ghcr.io/rickyltwong/xnatio:latest
+    # Or build locally for development:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     environment:
-      # Override these in .env file or via docker-compose --env-file
-      - XNAT_SERVER=${XNAT_SERVER}
-      - XNAT_USERNAME=${XNAT_USERNAME}
-      - XNAT_PASSWORD=${XNAT_PASSWORD}
+      # Required: XNAT connection (set in .env file or export before running)
+      - XNAT_SERVER=${XNAT_SERVER:?XNAT_SERVER is required}
+      - XNAT_USERNAME=${XNAT_USERNAME:?XNAT_USERNAME is required}
+      - XNAT_PASSWORD=${XNAT_PASSWORD:?XNAT_PASSWORD is required}
+      # Optional: TLS verification (default: true)
       - XNAT_VERIFY_TLS=${XNAT_VERIFY_TLS:-true}
+      # Optional: DICOM C-STORE settings
+      - XNAT_DICOM_HOST=${XNAT_DICOM_HOST:-}
+      - XNAT_DICOM_PORT=${XNAT_DICOM_PORT:-8104}
+      - XNAT_DICOM_CALLED_AET=${XNAT_DICOM_CALLED_AET:-XNAT}
+      - XNAT_DICOM_CALLING_AET=${XNAT_DICOM_CALLING_AET:-XNATIO}
     volumes:
-      # Mount config directory (contains patterns.json)
+      # Mount config directory for patterns.json (optional)
       - ./config:/config:ro
+      # Mount data directory for uploads/downloads (optional, add as needed)
+      # - /path/to/data:/data:ro
     # Override entrypoint for debugging
-    # entrypoint: ["/bin/bash"]
+    # entrypoint: ["/bin/bash", "-c", "sleep infinity"]

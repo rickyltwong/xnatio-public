@@ -18,7 +18,7 @@ Examples:
 ```bash
 xio upload-dicom PRJ SUBJ SESS /path/to/dicom_dir --env dev -v
 xio upload-dicom PRJ SUBJ SESS /path/to/dicom_dir --transport dicom-store \
-  --dicom-host 192.168.1.10 --dicom-port 8104 --dicom-called-aet XNAT --env dev -v
+  --dicom-host xnat.example.org --dicom-port 8104 --dicom-called-aet XNAT --env dev -v
 xio upload-resource PRJ SUBJ SESS BIDS /path/to/bids_dir --env dev -v
 ```
 

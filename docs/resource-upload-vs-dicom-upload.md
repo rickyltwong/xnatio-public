@@ -47,7 +47,7 @@ xio upload-dicom PROJECT SUBJECT SESSION /path/to/dicoms.tar.gz --env prod -v
 # Upload via DICOM C-STORE transport
 xio upload-dicom PROJECT SUBJECT SESSION /path/to/dicom_folder \
   --transport dicom-store \
-  --dicom-host 192.168.1.10 --dicom-port 8104 \
+  --dicom-host xnat.example.org --dicom-port 8104 \
   --dicom-called-aet XNAT --dicom-calling-aet XNATIO --env prod -v
 ```
 

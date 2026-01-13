@@ -219,7 +219,7 @@ xio upload-dicom DEMO_PRJ DEMO_SUBJ DEMO_SESS \
 # Send via DICOM C-STORE instead of REST
 xio upload-dicom DEMO_PRJ DEMO_SUBJ DEMO_SESS \
   /path/to/dicom_dir --transport dicom-store \
-  --dicom-host 192.168.1.10 --dicom-port 8104 \
+  --dicom-host xnat.example.org --dicom-port 8104 \
   --dicom-called-aet XNAT --dicom-calling-aet XNATIO --env test -v
 
 See [docs/dicom-store-upload.md](docs/dicom-store-upload.md) for details.

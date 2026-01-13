@@ -45,7 +45,7 @@ xio upload-dicom PROJECT SUBJECT SESSION /path/to/dicom_dir --env dev -v
 # Upload via DICOM C-STORE
 xio upload-dicom PROJECT SUBJECT SESSION /path/to/dicom_dir \
   --transport dicom-store \
-  --dicom-host 192.168.1.10 --dicom-port 8104 \
+  --dicom-host xnat.example.org --dicom-port 8104 \
   --dicom-called-aet XNAT --dicom-calling-aet XNATIO --env dev -v
 
 # Upload session resources (BIDS, derivatives)
