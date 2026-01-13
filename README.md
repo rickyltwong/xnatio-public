@@ -12,10 +12,10 @@ Inspired by niptools
 
 ```bash
 # Latest from main
-python -m pip install "xnatio @ git+https://github.com/rickyltwong/xnatio.git@main"
+python -m pip install "xnatio @ git+https://github.com/rickyltwong/xnatio-public.git@main"
 
 # Or pin to a tag (recommended once you create one)
-python -m pip install "xnatio @ git+https://github.com/rickyltwong/xnatio.git@v0.1.0"
+python -m pip install "xnatio @ git+https://github.com/rickyltwong/xnatio-public.git@v0.1.0"
 
 # Test the installation
 xnatio --help
@@ -26,7 +26,7 @@ xio --help
 ### From Source (Recommended)
 
 ```bash
-git clone https://github.com/rickyltwong/xnatio.git
+git clone https://github.com/rickyltwong/xnatio-public.git
 cd xnatio
 pip install .
 
@@ -39,7 +39,7 @@ xio --help
 ### For Development
 
 ```bash
-git clone https://github.com/rickyltwong/xnatio.git
+git clone https://github.com/rickyltwong/xnatio-public.git
 cd xnatio
 
 # Option 1: Using uv (fast)
@@ -57,9 +57,9 @@ xnatio --help
 
 ```bash
 # No clone (install directly from GitHub)
-pipx install "xnatio@git+https://github.com/rickyltwong/xnatio.git@main"
+pipx install "xnatio@git+https://github.com/rickyltwong/xnatio-public.git@main"
 # Or pin to a tag (recommended once you create one)
-pipx install "xnatio@git+https://github.com/rickyltwong/xnatio.git@v0.1.0"
+pipx install "xnatio@git+https://github.com/rickyltwong/xnatio-public.git@v0.1.0"
 xnatio --help
 ```
 

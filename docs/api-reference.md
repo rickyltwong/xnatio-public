@@ -5,7 +5,7 @@ This document provides a comprehensive reference for using xnatio as a Python li
 ## Installation
 
 ```bash
-pip install "xnatio @ git+https://github.com/rickyltwong/xnatio.git@main"
+pip install "xnatio @ git+https://github.com/rickyltwong/xnatio-public.git@main"
 ```
 
 ## Quick Start

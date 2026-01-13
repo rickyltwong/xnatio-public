@@ -5,7 +5,7 @@ This guide gets new team members productive with XNATIO for daily XNAT admin tas
 ## 1) Install and Run
 
 ```bash
-git clone https://github.com/rickyltwong/xnatio.git
+git clone https://github.com/rickyltwong/xnatio-public.git
 cd xnatio
 
 # Option 1: uv (recommended)

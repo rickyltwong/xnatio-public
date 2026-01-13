@@ -26,7 +26,7 @@
 services:
   xnatio:
     # Use pre-built image from GHCR (recommended for production)
-    image: ghcr.io/rickyltwong/xnatio:latest
+    image: ghcr.io/rickyltwong/xnatio-public:latest
     # Or build locally for development:
     # build:
     #   context: .
