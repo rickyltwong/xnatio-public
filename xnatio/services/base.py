@@ -20,14 +20,11 @@ from ..config import XNATConfig
 from ..core import (
     # Exceptions
     AuthenticationError,
-    NetworkError,
+    LogContext,
     RetryExhaustedError,
     ServerUnreachableError,
-    TimeoutError,
-    # Logging
     get_audit_logger,
     get_logger,
-    LogContext,
     # Validation
     validate_server_url,
     validate_timeout,

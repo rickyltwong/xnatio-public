@@ -8,20 +8,15 @@ This module handles scan-level operations:
 
 from __future__ import annotations
 
-import logging
 import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
-from urllib.parse import quote
 
 from ..core import (
     # Exceptions
-    DeleteError,
-    ResourceNotFoundError,
-    # Logging
+    LogContext,
     get_audit_logger,
     get_logger,
-    LogContext,
     # Validation
     validate_project_id,
     validate_scan_id,

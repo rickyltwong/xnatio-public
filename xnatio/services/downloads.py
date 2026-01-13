@@ -9,7 +9,6 @@ This module handles file downloads:
 
 from __future__ import annotations
 
-import logging
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -17,12 +16,10 @@ from typing import List, Optional
 from urllib.parse import quote
 
 from ..core import (
+    LogContext,
     # Exceptions
-    SessionDownloadError,
-    # Logging
     get_audit_logger,
     get_logger,
-    LogContext,
     # Validation
     validate_path_exists,
     validate_path_writable,

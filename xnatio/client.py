@@ -176,9 +176,7 @@ class XNATClient:
         """List experiments for a subject."""
         return self._projects.list_subject_experiments(project, subject)
 
-    def list_subject_experiments_detailed(
-        self, project: str, subject: str
-    ) -> List[Dict[str, str]]:
+    def list_subject_experiments_detailed(self, project: str, subject: str) -> List[Dict[str, str]]:
         """List experiments with timing metadata."""
         return self._projects.list_subject_experiments_detailed(project, subject)
 
@@ -369,9 +367,7 @@ class XNATClient:
     # Download operations (delegated to DownloadService)
     # =========================================================================
 
-    def download_scans_zip(
-        self, project: str, subject: str, session: str, out_dir: Path
-    ) -> Path:
+    def download_scans_zip(self, project: str, subject: str, session: str, out_dir: Path) -> Path:
         """Download all scans as ZIP."""
         return self._downloads.download_scans_zip(project, subject, session, out_dir)
 

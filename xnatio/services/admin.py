@@ -8,25 +8,18 @@ This module handles administrative tasks:
 
 from __future__ import annotations
 
-import logging
-import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from urllib.parse import quote
 
 from ..core import (
     # Exceptions
-    BatchOperationError,
-    RenameError,
-    ValidationError,
-    # Logging
+    LogContext,
     get_audit_logger,
     get_logger,
-    LogContext,
     # Validation
     validate_project_id,
     validate_regex_pattern,
-    validate_subject_id,
     validate_workers,
 )
 from .base import XNATConnection
@@ -115,9 +108,7 @@ class AdminService:
             # Filter by specific IDs if provided
             if experiment_ids:
                 targets = {eid.strip() for eid in experiment_ids if eid.strip()}
-                experiments = [
-                    exp for exp in experiments if exp[1] in targets or exp[2] in targets
-                ]
+                experiments = [exp for exp in experiments if exp[1] in targets or exp[2] in targets]
 
             # Apply limit
             if limit is not None and limit >= 0:
@@ -150,7 +141,9 @@ class AdminService:
                         r.raise_for_status()
 
                     self.conn.retry_on_network_error(_do_refresh, operation="refresh_catalog")
-                    self.log.info("Refreshed catalog for experiment %s (subject %s)", exp_id, subject_id)
+                    self.log.info(
+                        "Refreshed catalog for experiment %s (subject %s)", exp_id, subject_id
+                    )
                     return exp_id
 
                 except Exception as e:
@@ -412,7 +405,9 @@ class AdminService:
                             skipped.append((label, f"failed to delete empty subject: {e}"))
                         continue
 
-                    self.log.info("Merging %s -> %s: moving %d experiments", label, target, len(exps))
+                    self.log.info(
+                        "Merging %s -> %s: moving %d experiments", label, target, len(exps)
+                    )
                     move_failed = False
 
                     for exp in exps:
@@ -432,7 +427,9 @@ class AdminService:
                         merged[label] = target
                         current_labels.discard(label)
                     except Exception as e:
-                        self.log.warning("Experiments moved but failed to delete source %s: %s", label, e)
+                        self.log.warning(
+                            "Experiments moved but failed to delete source %s: %s", label, e
+                        )
                         merged[label] = target
 
                 else:

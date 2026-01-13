@@ -8,7 +8,6 @@ This module handles file uploads:
 
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 from typing import Optional, Sequence
 from urllib.parse import quote
@@ -16,14 +15,10 @@ from urllib.parse import quote
 from ..core import (
     # Exceptions
     ArchiveUploadError,
+    LogContext,
     ResourceUploadError,
-    ValidationError,
-    # Logging
     get_audit_logger,
     get_logger,
-    LogContext,
-    # Utils
-    zip_dir_to_temp,
     # Validation
     validate_archive_path,
     validate_overwrite_mode,
@@ -33,6 +28,8 @@ from ..core import (
     validate_scan_id,
     validate_session_id,
     validate_subject_id,
+    # Utils
+    zip_dir_to_temp,
 )
 from .base import XNATConnection
 from .projects import ProjectService
@@ -129,7 +126,11 @@ class UploadService:
                     "upload_resource_file",
                     project=project,
                     session=session,
-                    details={"resource": resource_label, "file": file_path.name, "size_mb": size_mb},
+                    details={
+                        "resource": resource_label,
+                        "file": file_path.name,
+                        "size_mb": size_mb,
+                    },
                     user=self.conn.username,
                     success=True,
                 )
@@ -185,7 +186,8 @@ class UploadService:
                     continue
 
                 rel_path = path.relative_to(local_dir).as_posix()
-                url = f"{base}/resources/{quote(resource_label)}/files/{quote(rel_path)}?inbody=true"
+                res_path = f"resources/{quote(resource_label)}/files/{quote(rel_path)}"
+                url = f"{base}/{res_path}?inbody=true"
 
                 try:
                     with open(path, "rb") as f:

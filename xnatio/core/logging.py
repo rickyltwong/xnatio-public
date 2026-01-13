@@ -458,7 +458,9 @@ def mask_sensitive(value: str, visible_chars: int = 4) -> str:
     return "*" * (len(value) - visible_chars) + value[-visible_chars:]
 
 
-def sanitize_for_log(data: dict[str, Any], sensitive_keys: Optional[set[str]] = None) -> dict[str, Any]:
+def sanitize_for_log(
+    data: dict[str, Any], sensitive_keys: Optional[set[str]] = None
+) -> dict[str, Any]:
     """Sanitize a dictionary for logging by masking sensitive values.
 
     Args:
@@ -473,10 +475,12 @@ def sanitize_for_log(data: dict[str, Any], sensitive_keys: Optional[set[str]] = 
 
     result = {}
     for key, value in data.items():
-        if any(s in key.lower() for s in sensitive_keys):
-            result[key] = mask_sensitive(str(value)) if value else None
-        elif isinstance(value, dict):
+        if isinstance(value, dict):
+            # Recurse into nested dicts first
             result[key] = sanitize_for_log(value, sensitive_keys)
+        elif any(s in key.lower() for s in sensitive_keys):
+            # Mask sensitive leaf values
+            result[key] = mask_sensitive(str(value)) if value else None
         else:
             result[key] = value
     return result

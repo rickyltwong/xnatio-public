@@ -8,19 +8,16 @@ This module handles CRUD operations for XNAT container hierarchy:
 
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 from urllib.parse import quote
 
 from ..core import (
+    LogContext,
     # Exceptions
-    ResourceAccessDeniedError,
-    ResourceExistsError,
     ResourceNotFoundError,
     # Logging
     get_audit_logger,
     get_logger,
-    LogContext,
     # Validation
     validate_project_id,
     validate_session_id,
@@ -396,15 +393,17 @@ class ProjectService:
             exp_id = str(entry.get("ID") or entry.get("id") or "").strip()
             if not exp_id:
                 continue
-            experiments.append({
-                "ID": exp_id,
-                "label": str(entry.get("label") or "").strip(),
-                "xsiType": str(entry.get("xsiType") or "").strip(),
-                "date": str(entry.get("date") or entry.get("session_date") or "").strip(),
-                "time": str(entry.get("time") or entry.get("start_time") or "").strip(),
-                "insert_date": str(entry.get("insert_date") or "").strip(),
-                "insert_time": str(entry.get("insert_time") or "").strip(),
-            })
+            experiments.append(
+                {
+                    "ID": exp_id,
+                    "label": str(entry.get("label") or "").strip(),
+                    "xsiType": str(entry.get("xsiType") or "").strip(),
+                    "date": str(entry.get("date") or entry.get("session_date") or "").strip(),
+                    "time": str(entry.get("time") or entry.get("start_time") or "").strip(),
+                    "insert_date": str(entry.get("insert_date") or "").strip(),
+                    "insert_time": str(entry.get("insert_time") or "").strip(),
+                }
+            )
 
         return experiments
 

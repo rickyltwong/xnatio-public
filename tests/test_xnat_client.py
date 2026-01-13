@@ -61,6 +61,9 @@ class TestXNATClientInit:
                 password="testpass",
             )
 
+            # Trigger lazy interface initialization
+            _ = client._conn.interface
+
             mock_interface.assert_called_once()
             assert client.server == "https://xnat.example.com"
             assert client.username == "testuser"

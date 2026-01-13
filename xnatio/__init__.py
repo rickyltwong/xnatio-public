@@ -22,10 +22,35 @@ __author__ = "Ricky Wong"
 __description__ = "Production-grade CLI for XNAT server administration"
 
 # Core configuration
-from .config import XNATConfig, load_config
-
 # Backward-compatible client (facade pattern)
 from .client import XNATClient
+from .config import XNATConfig, load_config
+
+# Core modules: exceptions, logging, validation, utilities
+from .core import (
+    ConfigurationError,
+    ConnectionError,
+    DicomError,
+    DownloadError,
+    LogContext,
+    NetworkError,
+    OperationError,
+    ResourceError,
+    UploadError,
+    ValidationError,
+    # Exceptions
+    XNATError,
+    get_audit_logger,
+    get_logger,
+    # Logging
+    setup_logging,
+    validate_port,
+    validate_project_id,
+    # Validation
+    validate_server_url,
+    validate_session_id,
+    validate_subject_id,
+)
 
 # Modular services (preferred for new code)
 from .services import (
@@ -35,32 +60,6 @@ from .services import (
     ScanService,
     UploadService,
     XNATConnection,
-)
-
-# Core modules: exceptions, logging, validation, utilities
-from .core import (
-    # Exceptions
-    XNATError,
-    ConfigurationError,
-    ConnectionError,
-    ValidationError,
-    ResourceError,
-    UploadError,
-    DownloadError,
-    OperationError,
-    NetworkError,
-    DicomError,
-    # Logging
-    setup_logging,
-    get_logger,
-    LogContext,
-    get_audit_logger,
-    # Validation
-    validate_server_url,
-    validate_port,
-    validate_project_id,
-    validate_subject_id,
-    validate_session_id,
 )
 
 # Legacy uploaders (for backward compatibility)
