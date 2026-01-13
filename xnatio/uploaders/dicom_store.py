@@ -17,9 +17,9 @@ from .constants import DEFAULT_DICOM_CALLING_AET, DEFAULT_DICOM_STORE_BATCHES
 
 VERIFICATION_UID = "1.2.840.10008.1.1"
 try:
-    from pynetdicom.sop_class import VerificationSOPClass  # pre-3.1 path
+    from pynetdicom.sop_class import VerificationSOPClass  # type: ignore[attr-defined]
 except (ImportError, AttributeError):
-    VerificationSOPClass = VERIFICATION_UID  # type: ignore
+    VerificationSOPClass = VERIFICATION_UID  # type: ignore[assignment]
 
 try:
     from pynetdicom import StoragePresentationContexts  # 2.x/3.0.x

@@ -208,7 +208,7 @@ def register(subparsers: argparse._SubParsersAction) -> None:
                     return
                 log.info("[%s] %s", progress.phase, progress.message)
 
-            summary = upload_dicom_parallel_rest(
+            rest_summary = upload_dicom_parallel_rest(
                 server=str(cfg["server"]),
                 username=str(cfg["user"]),
                 password=str(cfg["password"]),
@@ -230,17 +230,17 @@ def register(subparsers: argparse._SubParsersAction) -> None:
 
             log.info(
                 "REST upload complete: %s files, %.1f MB, %ss",
-                summary.total_files,
-                summary.total_size_mb,
-                int(summary.duration),
+                rest_summary.total_files,
+                rest_summary.total_size_mb,
+                int(rest_summary.duration),
             )
-            if summary.errors:
-                for error in summary.errors[:5]:
+            if rest_summary.errors:
+                for error in rest_summary.errors[:5]:
                     log.error("Upload error: %s", error)
-                if len(summary.errors) > 5:
-                    log.error("... and %s more errors", len(summary.errors) - 5)
+                if len(rest_summary.errors) > 5:
+                    log.error("... and %s more errors", len(rest_summary.errors) - 5)
 
-            return 0 if summary.success else 1
+            return 0 if rest_summary.success else 1
 
         if inp.is_file():
             if not is_allowed_archive(inp):

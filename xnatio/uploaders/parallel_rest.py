@@ -396,7 +396,7 @@ def upload_dicom_parallel_rest(
             futures = {}
             for i, (batch, archive_path) in enumerate(zip(batches, archive_paths)):
                 future = executor.submit(
-                    upload_batch,
+                    upload_batch,  # type: ignore[arg-type]
                     server=server,
                     username=username,
                     password=password,
@@ -416,7 +416,7 @@ def upload_dicom_parallel_rest(
                 futures[future] = i + 1
 
             for future in as_completed(futures):
-                result = future.result()
+                result: UploadResult = future.result()  # type: ignore[assignment]
                 results.append(result)
 
                 if not result.success:

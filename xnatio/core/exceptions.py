@@ -277,7 +277,7 @@ class DicomUploadError(UploadError):
         self.session = session
         self.files_processed = files_processed
         self.files_failed = files_failed
-        details = {"processed": files_processed, "failed": files_failed}
+        details: dict[str, object] = {"processed": files_processed, "failed": files_failed}
         if session:
             details["session"] = session
         super().__init__(message, details=details, operation="dicom_upload")

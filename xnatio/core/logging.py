@@ -297,7 +297,7 @@ class LogContext:
         exc_type: Optional[type],
         exc_val: Optional[BaseException],
         exc_tb: Any,
-    ) -> bool:
+    ) -> None:
         import time
 
         duration_ms = (time.time() - (self.start_time or 0)) * 1000
@@ -325,7 +325,7 @@ class LogContext:
         if self._cid_token is not None:
             _correlation_id.reset(self._cid_token)
 
-        return False  # Don't suppress exceptions
+        # Don't suppress exceptions (returning None is equivalent to False)
 
     def add_detail(self, key: str, value: Any) -> None:
         """Add a detail to the operation context."""
@@ -473,7 +473,7 @@ def sanitize_for_log(
     if sensitive_keys is None:
         sensitive_keys = {"password", "token", "secret", "api_key", "credential", "auth"}
 
-    result = {}
+    result: dict[str, Any] = {}
     for key, value in data.items():
         if isinstance(value, dict):
             # Recurse into nested dicts first
